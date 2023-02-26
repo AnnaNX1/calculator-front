@@ -9,6 +9,7 @@
           {name: 'price', description: 'price descr'},
           {name: 'parse YM', description: 'parse YM descr'}
         ]"
+        link="http://localhost:3000/findPriceForMarketplace/ym/calcEffByPrice"
       ></request-form>
       <request-form
         title="get price"

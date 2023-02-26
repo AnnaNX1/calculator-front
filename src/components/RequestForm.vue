@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-defineProps<{
+import { ref } from 'vue'
+const props = defineProps<{
   title: { type: string, required: true },
   runButtonTitle: { type: string, required: true },
   filesDescription: {
@@ -13,9 +14,43 @@ defineProps<{
   }
 }
 >()
+let active = ref(false)
+function setActive() {
+  active.value = true
+}
+function setInactive() {
+  active.value = false
+}
+// import  useFileList  from  '../compositions/file-list'
+// const { files, addFiles, removeFile } = useFileList()
+
+const files = ref([])
+
+import  createUploader  from  '../compositions/file-uploader'
+const { uploadFiles } = createUploader(`http://localhost:3000/findPriceForMarketplace/ym/calcEffByPrice`)
+
+const setFileToUser = async (response) => {
+  const headers = response.headers
+  const blob = new Blob([await response.blob()], { type: headers['content-type'] })
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a')
+  a.href = url;
+  a.download = `${props.title}.xlsx`;
+  // a.download = `1.xlsx`;
+  a.click();
+  a.remove()
+}
 </script>
 
 <template>
+  <div>{{files}}
+    <div v-if="active">
+      <v-progress-circular
+        indeterminate
+        color="primary"
+      ></v-progress-circular>
+    </div>
+    <div>
       <h1 class="text-h2 font-weight-bold">{{title}}</h1>
 
       <div class="py-14" />
@@ -32,6 +67,7 @@ defineProps<{
 
         <v-col cols="auto">
           <v-file-input
+            v-model="files"
             multiple
             label="File input"
           ></v-file-input>
@@ -39,8 +75,13 @@ defineProps<{
 
         <v-col cols="auto">
           <v-btn
+            @click.prevent="async () => {
+              setActive()
+              const response = await uploadFiles(files)
+              setInactive()
+              await setFileToUser(response)
+            }"
             color="primary"
-            href="https://next.vuetifyjs.com/introduction/why-vuetify/#feature-guides"
             min-width="228"
             rel="noopener noreferrer"
             size="x-large"
@@ -57,4 +98,6 @@ defineProps<{
           </v-btn>
         </v-col>
       </v-row>
+    </div>
+  </div>
 </template>
