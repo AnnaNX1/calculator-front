@@ -1,16 +1,19 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 const props = defineProps<{
-  title: { type: string, required: true },
-  runButtonTitle: { type: string, required: true },
-  filesDescription: {
-    type: [
-      {
-        name: string,
-        description: string,
-        link: string
-      }],
-    required: true
+  description: {
+    methodLink: {type: string, required: true},
+    title: {type: string, required: true},
+    runButtonTitle: {type: string, required: true},
+    filesDescription: {
+      type: [
+        {
+          name: string,
+          description: string,
+          link: string
+        }],
+      required: true
+    }
   }
 }
 >()
@@ -26,24 +29,23 @@ function setInactive() {
 
 const files = ref([])
 
-import  createUploader  from  '../compositions/file-uploader'
-const { uploadFiles } = createUploader(`http://localhost:3000/findPriceForMarketplace/ym/calcEffByPrice`)
-
+import  { uploadFiles }  from  '../compositions/file-uploader'
 const setFileToUser = async (response) => {
   const headers = response.headers
   const blob = new Blob([await response.blob()], { type: headers['content-type'] })
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement('a')
   a.href = url;
-  a.download = `${props.title}.xlsx`;
+  a.download = `${props.description.title}.xlsx`;
   // a.download = `1.xlsx`;
   a.click();
   a.remove()
 }
+const VITE_URL = import.meta.env.VITE_URL;
 </script>
 
 <template>
-  <div>{{files}}
+  <div>
     <div v-if="active">
       <v-progress-circular
         indeterminate
@@ -51,33 +53,49 @@ const setFileToUser = async (response) => {
       ></v-progress-circular>
     </div>
     <div>
-      <h1 class="text-h2 font-weight-bold">{{title}}</h1>
+      <h1 class="text-h2 font-weight-bold">{{description.title}}</h1>
 
       <div class="py-14" />
 
       <v-row class="d-flex align-center justify-center">
         <v-col cols="auto">
-          <h2>Load files:</h2>
-          <div v-for="file in filesDescription">
+          <h2>Input files:</h2>
+          <div v-for="file in description.filesDescription">
             {{file.name}}
             <span v-if="file.description">({{file.description}})</span>
-            <span v-if="file.link">load</span>
+            <v-tooltip text="Load file" location="bottom">
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  v-bind="props"
+                  color="primary"
+                  :href="`${VITE_URL}${file.link}`"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  class="ma-2"
+                  variant="text"
+                  icon="mdi-download"
+                  :disabled="!file.link"
+                ></v-btn>
+              </template>
+            </v-tooltip>
           </div>
         </v-col>
 
         <v-col cols="auto">
           <v-file-input
+            ref="fileInput"
             v-model="files"
             multiple
             label="File input"
           ></v-file-input>
         </v-col>
 
-        <v-col cols="auto">
+        <v-col cols="auto">{{files}}
           <v-btn
             @click.prevent="async () => {
               setActive()
-              const response = await uploadFiles(files)
+              const response = await uploadFiles(files, `${VITE_URL}${description.methodLink}`)
+              this.$refs.fileInput.reset()
               setInactive()
               await setFileToUser(response)
             }"
@@ -94,7 +112,7 @@ const setFileToUser = async (response) => {
               start
             />
 
-            {{runButtonTitle}}
+            {{description.runButtonTitle}}
           </v-btn>
         </v-col>
       </v-row>

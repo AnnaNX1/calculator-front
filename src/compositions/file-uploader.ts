@@ -13,12 +13,3 @@ export async function uploadFiles(files, url) {
 
   return response
 }
-
-export default function createUploader(url) {
-    return {
-      uploadFiles: function (files) {
-          console.log(files)
-            return uploadFiles(files, url)
-        },
-    }
-}

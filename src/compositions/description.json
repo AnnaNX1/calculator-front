@@ -1,0 +1,38 @@
+{
+  "ym": {
+    "get eff": {
+      "methodLink": "findPriceForMarketplace/ym/calcEffByPrice",
+      "title": "get eff",
+      "runButtonTitle": "eff",
+      "filesDescription": [
+        {
+          "name": "price",
+          "description": "price descr",
+          "link": "ym_calcEffByPrice_price.xlsx"
+        },
+        {
+          "name": "parse YM",
+          "description": "parse YM descr",
+          "link": "ym_calcEffByPrice_parse.xlsx"
+        }
+      ]
+    },
+    "get price": {
+      "methodLink": "findPriceForMarketplace/ym/calcPriceByEff",
+      "title": "get price",
+      "runButtonTitle": "price",
+      "filesDescription": [
+        {
+          "name": "eff",
+          "description": "eff descr",
+          "link": "ym_calcPriceByEff_eff.xlsx"
+        },
+        {
+          "name": "parse YM",
+          "description": "parse YM descr",
+          "link": "ym_calcPriceByEff_parse.xlsx"
+        }
+      ]
+    }
+  }
+}
