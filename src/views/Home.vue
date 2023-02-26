@@ -5,31 +5,16 @@
       <request-form
         :description="description['ym']['get eff']"
       ></request-form>
-<!--      <request-form-->
-<!--        title="get price"-->
-<!--        runButtonTitle="price"-->
-<!--        :filesDescription="[-->
-<!--          {name: 'price', description: 'price descr'},-->
-<!--          {name: 'parse YM', description: 'parse YM descr'}-->
-<!--        ]"-->
-<!--      ></request-form>-->
-<!--      <h1 class="text-h2 font-weight-bold">Ozon</h1>-->
-<!--      <request-form-->
-<!--        title="get eff"-->
-<!--        runButtonTitle="eff"-->
-<!--        :filesDescription="[-->
-<!--          {name: 'price', description: 'price descr'},-->
-<!--          {name: 'parse YM', description: 'parse YM descr'}-->
-<!--        ]"-->
-<!--      ></request-form>-->
-<!--      <request-form-->
-<!--        title="get price"-->
-<!--        runButtonTitle="price"-->
-<!--        :filesDescription="[-->
-<!--          {name: 'price', description: 'price descr'},-->
-<!--          {name: 'parse YM', description: 'parse YM descr'}-->
-<!--        ]"-->
-<!--      ></request-form>-->
+      <request-form
+        :description="description['ym']['get price']"
+      ></request-form>
+      <h1 class="text-h2 font-weight-bold">Ozon</h1>
+      <request-form
+        :description="description['ozon']['get eff']"
+      ></request-form>
+      <request-form
+        :description="description['ozon']['get price']"
+      ></request-form>
     <!--  <HelloWorld />-->
     </v-responsive>
   </v-container>

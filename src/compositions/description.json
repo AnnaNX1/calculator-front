@@ -34,5 +34,52 @@
         }
       ]
     }
+  },
+
+  "ozon": {
+    "get eff": {
+      "methodLink": "findPriceForMarketplace/ozon/calcEffByPrice",
+      "title": "get eff",
+      "runButtonTitle": "eff",
+      "filesDescription": [
+        {
+          "name": "price",
+          "description": "price descr",
+          "link": "ozon_calcEffByPrice_price.xlsx"
+        },
+        {
+          "name": "purchase",
+          "description": "purchase descr",
+          "link": "ozon_calcEffByPrice_purchase.xlsx"
+        },
+        {
+          "name": "template",
+          "description": "template descr",
+          "link": "ozon_calcPriceByEff_template.xlsx"
+        }
+      ]
+    },
+    "get price": {
+      "methodLink": "findPriceForMarketplace/ozon/calcPriceByEff",
+      "title": "get price",
+      "runButtonTitle": "price",
+      "filesDescription": [
+        {
+          "name": "eff",
+          "description": "eff descr",
+          "link": "ozon_calcPriceByEff_eff.xlsx"
+        },
+        {
+          "name": "purchase",
+          "description": "purchase descr",
+          "link": "ozon_calcEffByPrice_purchase.xlsx"
+        },
+        {
+          "name": "template",
+          "description": "template descr",
+          "link": "ozon_calcPriceByEff_template.xlsx"
+        }
+      ]
+    }
   }
 }
