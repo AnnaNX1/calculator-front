@@ -1,4 +1,4 @@
-export async function uploadFiles(files, url) {
+export async function uploadFiles(files: any[], url: string) {
   // set up the request data
   let formData = new FormData()
   for(const file of files) {
@@ -6,7 +6,7 @@ export async function uploadFiles(files, url) {
   }
   // track status and upload file
   // file.status = 'loading'
-  let response = await fetch(url, { method: 'POST', mode: "cors", body: formData })
+  let response: any = await fetch(url, { method: 'POST', mode: "cors", body: formData })
 
   // change status to indicate the success of the upload request
   // file.status = response.ok

@@ -1,21 +1,20 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
+import  { uploadFiles }  from  '../compositions/file-uploader'
+
 const props = defineProps<{
   description: {
-    methodLink: {type: string, required: true},
-    title: {type: string, required: true},
-    runButtonTitle: {type: string, required: true},
-    filesDescription: {
-      type: [
-        {
-          name: string,
-          description: string,
-          link: string
-        }],
-      required: true
-    }
+    methodLink: string,
+    title: string,
+    runButtonTitle: string,
+    filesDescription:
+      {
+        name: string,
+        description: string,
+        link: string
+      }[]
   },
-  color: {type: string, required: false}
+  color: string
 }
 >()
 let active = ref(false)
@@ -29,9 +28,7 @@ function setInactive() {
 // const { files, addFiles, removeFile } = useFileList()
 
 const files = ref([])
-
-import  { uploadFiles }  from  '../compositions/file-uploader'
-const setFileToUser = async (response) => {
+const setFileToUser = async (response: any) => {
   const headers = response.headers
   const blob = new Blob([await response.blob()], { type: headers['content-type'] })
   const url = window.URL.createObjectURL(blob);
@@ -119,10 +116,9 @@ const VITE_URL = import.meta.env.VITE_URL;
                 icon
                 @click.prevent="async () => {
                   setActive()
-                  const response = await uploadFiles(files, `${VITE_URL}${description.methodLink}`)
+                  await setFileToUser(await uploadFiles(files, `${VITE_URL}${description.methodLink}`))
                   this.$refs.fileInput.reset()
                   setInactive()
-                  await setFileToUser(response)
                 }"
                 :color="color ? color : 'primary'"
                 rel="noopener noreferrer"
