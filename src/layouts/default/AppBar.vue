@@ -1,7 +1,7 @@
 <template>
-  <v-app-bar flat>
+  <v-app-bar>
     <v-app-bar-title>
-      <v-icon icon="mdi-circle-slice-4" />
+      <v-icon icon="mdi-calculator-variant-outline" />
 
       Calc
     </v-app-bar-title>

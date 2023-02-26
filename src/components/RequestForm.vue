@@ -14,7 +14,8 @@ const props = defineProps<{
         }],
       required: true
     }
-  }
+  },
+  color: {type: string, required: false}
 }
 >()
 let active = ref(false)
@@ -45,22 +46,29 @@ const VITE_URL = import.meta.env.VITE_URL;
 </script>
 
 <template>
-  <div>
-    <div v-if="active">
-      <v-progress-circular
-        indeterminate
-        color="primary"
-      ></v-progress-circular>
+  <div style="position: relative;">
+    <div v-if="active" style="position: absolute; top: 0; width: 100%;">
+      <div style="text-align: center;">
+        <v-progress-circular
+          indeterminate
+          color="primary"
+        ></v-progress-circular>
+      </div>
     </div>
     <div>
-      <h1 class="text-h2 font-weight-bold">{{description.title}}</h1>
+<!--      <h1 class="text-h2 font-weight-bold">{{description.title}}</h1>-->
 
-      <div class="py-14" />
+      <v-row class="d-flex align-start justify-center">
 
-      <v-row class="d-flex align-center justify-center">
-        <v-col cols="auto">
+        <v-col cols="auto" style="min-width: 200px;">
+          <h1 class="text-h4 font-weight-bold">{{description.title}}</h1>
+        </v-col>
+        <v-col cols="auto" style="min-width: 200px;">
           <h2>Input files:</h2>
-          <div v-for="file in description.filesDescription">
+          <div
+            v-for="file in description.filesDescription"
+            style="text-align: left;"
+          >
             {{file.name}}
             <span v-if="file.description">({{file.description}})</span>
             <v-tooltip text="Load file" location="bottom">
@@ -71,7 +79,7 @@ const VITE_URL = import.meta.env.VITE_URL;
                   :href="`${VITE_URL}${file.link}`"
                   rel="noopener noreferrer"
                   target="_blank"
-                  class="ma-2"
+                  class="ml-2"
                   variant="text"
                   icon="mdi-download"
                   :disabled="!file.link"
@@ -81,39 +89,55 @@ const VITE_URL = import.meta.env.VITE_URL;
           </div>
         </v-col>
 
-        <v-col cols="auto">
+        <v-col cols="auto" style="min-width: 400px;">
           <v-file-input
             ref="fileInput"
             v-model="files"
             multiple
             label="File input"
-          ></v-file-input>
+            style="max-width: 380px;"
+          >
+            <template v-slot:selection="{ fileNames }">
+              <template v-for="fileName in fileNames" :key="fileName">
+                <v-chip
+                  label
+                  color="primary"
+                  class="me-2"
+                >
+                  {{ fileName }}
+                </v-chip>
+              </template>
+            </template>
+          </v-file-input>
         </v-col>
 
-        <v-col cols="auto">{{files}}
-          <v-btn
-            @click.prevent="async () => {
-              setActive()
-              const response = await uploadFiles(files, `${VITE_URL}${description.methodLink}`)
-              this.$refs.fileInput.reset()
-              setInactive()
-              await setFileToUser(response)
-            }"
-            color="primary"
-            min-width="228"
-            rel="noopener noreferrer"
-            size="x-large"
-            target="_blank"
-            variant="flat"
-          >
-            <v-icon
-              icon="mdi-speedometer"
-              size="large"
-              start
-            />
-
-            {{description.runButtonTitle}}
-          </v-btn>
+        <v-col cols="auto" style="min-width: 200px;">
+          <v-tooltip text="Calculate" location="bottom">
+            <template v-slot:activator="{ props }">
+              <v-btn
+                v-bind="props"
+                icon
+                @click.prevent="async () => {
+                  setActive()
+                  const response = await uploadFiles(files, `${VITE_URL}${description.methodLink}`)
+                  this.$refs.fileInput.reset()
+                  setInactive()
+                  await setFileToUser(response)
+                }"
+                :color="color ? color : 'primary'"
+                rel="noopener noreferrer"
+                size="x-large"
+                target="_blank"
+                variant="flat"
+                :disabled="!files.length || active"
+              >
+                <v-icon
+                  color="white"
+                  size="large"
+                >mdi-cog-outline</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
         </v-col>
       </v-row>
     </div>
